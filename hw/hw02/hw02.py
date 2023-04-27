@@ -32,7 +32,10 @@ def product(n, term):
     162
     """
     "*** YOUR CODE HERE ***"
-
+    res, i = 1, 1
+    while i <= n:
+        res, i = res * term(i), i + 1
+    return res
 
 def accumulate(merger, start, n, term):
     """Return the result of merging the first n terms in a sequence and start.
@@ -59,7 +62,10 @@ def accumulate(merger, start, n, term):
     16
     """
     "*** YOUR CODE HERE ***"
-
+    res, i = start, 1
+    while i <= n:
+        res, i = merger(res, term(i)), i + 1
+    return res
 
 def summation_using_accumulate(n, term):
     """Returns the sum: term(1) + ... + term(n), using accumulate.
@@ -75,8 +81,7 @@ def summation_using_accumulate(n, term):
     >>> [type(x).__name__ for x in ast.parse(inspect.getsource(summation_using_accumulate)).body[0].body]
     ['Expr', 'Return']
     """
-    "*** YOUR CODE HERE ***"
-
+    return accumulate(add, 0, n, term)
 
 def product_using_accumulate(n, term):
     """Returns the product: term(1) * ... * term(n), using accumulate.
@@ -92,8 +97,7 @@ def product_using_accumulate(n, term):
     >>> [type(x).__name__ for x in ast.parse(inspect.getsource(product_using_accumulate)).body[0].body]
     ['Expr', 'Return']
     """
-    "*** YOUR CODE HERE ***"
-
+    return accumulate(mul, 1, n, term)
 
 def funception(func1, start):
     """ Takes in a function (function 1) and a start value.
@@ -121,7 +125,16 @@ def funception(func1, start):
     >>> func2_6(4)    # Returns None since start < 0
     """
     "*** YOUR CODE HERE ***"
-
+    def func2(stop):
+        if start < 0:
+            return None
+        if start >= stop:
+            return func1(start)
+        res, i = 1, start
+        while i < stop:
+            res, i = mul(res, func1(i)), i + 1
+        return res
+    return func2
 
 def mul_by_num(num):
     """Returns a function that takes one argument and returns num
@@ -134,7 +147,7 @@ def mul_by_num(num):
     >>> y(-4)
     -8
     """
-    return ______
+    return lambda x: mul(x, num)
 
 
 def mod_maker():
@@ -148,7 +161,7 @@ def mod_maker():
     >>> mod(8,4) # 8 % 4
     True
     """
-    return ______
+    return lambda a, b: a % b == 0 or a % b
 
 
 def add_results(f1, f2):
@@ -171,7 +184,7 @@ def add_results(f1, f2):
     >>> a3(4)
     44
     """
-    return ______
+    return lambda x: f1(x) + f2(x)
 
 
 def lambda_math_syntax_check():

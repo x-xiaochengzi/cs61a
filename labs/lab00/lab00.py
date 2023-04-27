@@ -5,4 +5,4 @@ def twenty_twenty_three():
     >>> twenty_twenty_three()
     2023
     """
-    return 2020 + 3
+    return 1010 * 2 + 3

@@ -29,6 +29,15 @@ def ordered_digits(x):
 
     """
     "*** YOUR CODE HERE ***"
+    last_digit, k = x % 10, x // 10
+    while k > 0:
+        cur_digit = k % 10
+        if last_digit >= cur_digit:
+            last_digit = cur_digit
+        else:
+            return False
+        k //= 10
+    return True
 
 
 def get_k_run_starter(n, k):
@@ -52,12 +61,12 @@ def get_k_run_starter(n, k):
     """
     i = 0
     final = None
-    while ____________________________:
-        while ____________________________:
-            ____________________________
-        final = ____________________________
-        i = ____________________________
-        n = ____________________________
+    while i <= k:
+        while (n % 10 > n // 10 % 10) and n > 10:
+            n //= 10
+        final = n % 10
+        i = i + 1
+        n = n // 10
     return final
 
 
@@ -78,11 +87,21 @@ def make_repeater(func, n):
     """
     "*** YOUR CODE HERE ***"
 
+    def f(x):
+        i = 1
+        while i <= n:
+            x, i = func(x), i + 1
+        return x
+
+    return f
+
 
 def composer(func1, func2):
     """Return a function f, such that f(x) = func1(func2(x))."""
+
     def f(x):
         return func1(func2(x))
+
     return f
 
 
@@ -95,6 +114,7 @@ def apply_twice(func):
     16
     """
     "*** YOUR CODE HERE ***"
+    return lambda x: make_repeater(func, 2)(x)
 
 
 def div_by_primes_under(n):
@@ -109,12 +129,12 @@ def div_by_primes_under(n):
     False
     """
     checker = lambda x: False
-    i = ____________________________
-    while ____________________________:
+    i = 2
+    while i <= n:
         if not checker(i):
-            checker = ____________________________
-        i = ____________________________
-    return ____________________________
+            checker = (lambda f, i: lambda x: x % i == 0 or f(x))(checker, i)
+        i = i + 1
+    return checker
 
 
 def div_by_primes_under_no_lambda(n):
@@ -128,15 +148,16 @@ def div_by_primes_under_no_lambda(n):
     >>> div_by_primes_under_no_lambda(5)(1)
     False
     """
+
     def checker(x):
         return False
-    i = ____________________________
-    while ____________________________:
+    i = 2
+    while i <= n:
         if not checker(i):
-            def outer(____________________________):
-                def inner(____________________________):
-                    return ____________________________
-                return ____________________________
-            checker = ____________________________
-        i = ____________________________
-    return ____________________________
+            def outer(f, i):
+                def inner(x):
+                    return x % i == 0 or f(x)
+                return inner
+            checker = outer(checker, i)
+        i = i + 1
+    return checker

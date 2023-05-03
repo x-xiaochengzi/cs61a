@@ -25,6 +25,19 @@ def num_eights(n):
     True
     """
     "*** YOUR CODE HERE ***"
+    if n == 0:
+        return 0
+    if n % 10 == 8:
+        return 1 + num_eights(n // 10)
+    return num_eights(n // 10)
+
+
+def helper(i, n, num, flag):
+    if i == n:
+        return num
+    if i % 8 == 0 or num_eights(i) > 0:
+        return helper(i + 1, n, num - flag, -flag)
+    return helper(i + 1, n, num + flag, flag)
 
 
 def pingpong(n):
@@ -61,7 +74,7 @@ def pingpong(n):
     True
     """
     "*** YOUR CODE HERE ***"
-
+    return helper(1, n, 1, 1)
 
 def next_larger_coin(coin):
     """Returns the next larger coin in order.
@@ -117,3 +130,14 @@ def count_coins(change):
     True
     """
     "*** YOUR CODE HERE ***"
+    def count(changes, coin):
+        if changes == 0:       # base case
+            return 1
+        if changes < 0:
+            return 0
+        if coin is None:
+            return 0
+        if changes < coin:
+            return 0
+        return count(changes - coin, coin) + count(changes, next_larger_coin(coin))
+    return count(change, 1)
